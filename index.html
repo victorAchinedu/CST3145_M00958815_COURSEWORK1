@@ -13,30 +13,34 @@
 	<!-- link to CDN VUE JS  -->
 	<script src="https://cdn.jsdelivr.net/npm/vue@2/dist/vue.js"></script>
 	<!-- link to bootstrap icons -->
-	<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.11.3/font/bootstrap-icons.min.css">
+	<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.2/css/all.min.css">
 
 </head>
-<body>
-    <main id="app">
-		<div class="container mb-3">
-			<h1 class="text-center">Course work 1</h1>
 
-			<div class="d-flex">
-				<button class="btn btn-primary fs-3 p-3 rounded-circle ms-auto " v-on:click="showCheckOut"
-					:disabled="!cartSize > 0"> <i class="bi bi-bag-plus"></i> {{cartSize}}</button>
+<body>
+	<main id="app">
+		<div class="container my-5">
+
+
+			<div class="d-flex mb-5 align-items-end">
+
+				<h1 class="display-5 fw-bold">After School lessons</h1>
+				<button class="btn btn-lg btn-primary px-5 py-3 ms-auto rounded-5" v-on:click="showCheckOut"
+					:disabled="!cartSize > 0 && showProduct"> <i class="bi bi-cart"></i> {{cartSize}}</button>
 			</div>
 
 			<div class="container" v-if="showProduct">
 				<div class="d-flex align-items-end gap-3 flex-wrap mb-3">
 
 					<div>
-						<input type="text" class="form-control" v-model="searchTerm"
+						<label for="search" class="form-label">Search</label>
+						<input id="search" type="text" class="form-control" v-model="searchTerm"
 							placeholder="search for a lesson...">
 					</div>
 
 
 					<div>
-						<label for="sortAttribute">Sort By:</label>
+						<label for="sortAttribute" class="form-label">Sort By:</label>
 						<select v-model="sortAttribute" class="form-select">
 							<option value="title">Title</option>
 							<option value="subject">Subject</option>
@@ -47,7 +51,7 @@
 					</div>
 
 					<div>
-						<label for="sortOrder">Sort Order:</label>
+						<label for="sortOrder" class="form-label">Sort Order:</label>
 						<select v-model="sortOrder" class="form-select">
 							<option value="asc">Ascending</option>
 							<option value="desc">Descending</option>
@@ -57,29 +61,23 @@
 				</div>
 
 
-				<div class="row">
-					<div class="col-sm-4" v-for="product in sortLessons">
-						<div class="card mb-3 rounded-0 border border-black">
-							<div class="card-header">
-								<div class="d-flex justify-content-between align-items-baseline">
-                                    <div>
-                                        <h6>{{product.title}}</h6>
-                                    </div>
-                                    <div>
-                                        <i :class="product.icon" class="fs-1"></i>
-                                    </div>
-                                </div>
+				<div class="row row-cols-3 row-gap-3">
+					<div v-for="product in sortLessons">
+						<div class="card rounded-4">
+							<div class="card-header bg-transparent border-0">
+								<div class="d-flex justify-content-between align-items-center">
+									<div class="fw-medium fs-5">{{product.title}}</div>
+									<div><i :class="product.icon" class="fs-1"></i></div>
+								</div>
 							</div>
 							<div class="card-body">
 								<p>price: {{product.price}} AED</p>
 								<p>Spaces: {{product.spaces}}</p>
-                                <p>location: {{product.location}}</p>
+								<p>location: {{product.location}}</p>
 								<!-- add to cart button -->
-								<button class="btn add-btn-styled rounded" v-on:click='addToCart(product)'
+								<button class="btn btn-outline-success rounded-4" v-on:click='addToCart(product)'
 									:disabled="product.spaces === 0">Add to
 									cart</button>
-								<!-- remove from cart button -->
-								<button class="btn remove-btn-styled rounded" v-on:click='removeProduct(product)'>remove</button>
 							</div>
 						</div>
 					</div>
@@ -89,168 +87,50 @@
 			<!-- cart and checkout -->
 			<div class="container mt-4" v-else>
 				<div class="row">
-					<div class="col-sm-8 border rounded-3">
-						<div v-for="item in cart " class="border-bottom">
-								<div class="col-sm-12  mb-4 p-3">
-									<div class="row">
-										<div class="col-sm-4">
-											<i :class="item.lesson.icon" class="display-1 ms-auto"></i>
-										</div>
-										<div class="col-sm-4">
-											<p></p>Title: {{item.lesson.title}}</p>
-											<p>quantity: {{item.amount}}</p>
-										</div>
-										<div class="col-sm-4">
-											<p>price: {{item.lesson.price}}</p>
-										</div>
-									</div>
+
+
+					<div class="col-sm-8">
+						<div class="card rounded-4 mb-3" v-for="item in cart">
+							<div class="card-body">
+								<div class="d-flex gap-3 align-items-center">
+									<div><i :class="item.lesson.icon" class="fs-1"></i></div>
+									<div class="fw-medium fs-5">{{item.lesson.title}}</div>
 								</div>
+								<p>price: {{item.lesson.price}} AED</p>
+								<p>Quantity: {{item.amount}}</p>
+								<!-- add to cart button -->
+								<button class="btn btn-outline-danger rounded-4"
+									v-on:click="removeProduct(item.lesson)">remove</button>
+							</div>
 						</div>
 					</div>
+
+
 					<div class="col-sm-4">
-						<div class="container">
-							<div class="row justify-content-center">
-							  <div class="col-md-12">
-								<div class="card">
-								  <div class="card-body">
-									<h5 class="card-title">User Information</h5>
-									<form>
-									  <div class="mb-3">
+						<div class="card rounded-4">
+							<div class="card-body">
+								<h5 class="card-title">User Information</h5>
+								<form>
+									<div class="mb-3">
 										<label for="username" class="form-label">Username</label>
-										<input type="text" v-model="username" class="form-control" id="username" name="username" placeholder="Enter your username" required>
-									  </div>
-									  <div class="mb-3">
+										<input type="text" v-model="username" class="form-control"
+											id="username" name="username" placeholder="Enter your username"
+											required>
+									</div>
+									<div class="mb-3">
 										<label for="phone" class="form-label">Phone Number</label>
-										<input type="tel" v-model="phone" class="form-control" id="phone" name="phone" placeholder="Enter your phone number" required>
-									  </div>
-									  <button type="submit" class="btn btn-primary" :disabled="completeOrder">Submit</button>
-									</form>
-								  </div>
-								</div>
-							  </div>
+										<input type="tel" v-model="phone" class="form-control" id="phone"
+											name="phone" placeholder="Enter your phone number" required>
+									</div>
+									<button type="submit" class="btn btn-primary"
+										:disabled="!validateUserInfo">Submit</button>
+								</form>
 							</div>
-						  </div>
+						</div>
 					</div>
 				</div>
 			</div>
 	</main>
-    <script src="lessons.js"></script>
-	<script>
-		// mount VUE instance
-		var app = new Vue({
-			el: '#app',
-			// data object
-			data: {
-				showProduct: true,
-				lessons: lessons,
-				// cart container array
-				cart: [],
-				// search term to be bounded from model
-				searchTerm: '',
-				//a user must provide “Name” and “Phone number” before can click on the checkout button (1%)
-				username: '',
-				phone: '',
-				filteredLessons: [],
-				sortAttribute: 'subject',
-				sortOrder: 'asc',
-				sortedLessons: [],
-
-			},
-			// vue js app methods
-			methods: {
-				// add to cart method
-				addToCart(lesson) {
-					// push the product id to cart so as to search product by id and display it in cart page
-					// check if lessons spaces is greater than zero
-					if (lesson.spaces > 0) {
-						// take one from total space
-						lesson.spaces--
-						// find current lesson object in cart
-						var cartIndex = this.cart.findIndex(i => i.lesson === lesson)
-						// if lesson is already in cart increment amount by 1 so as to prevent duplicates and save space and memory
-						if (cartIndex > -1) {
-							this.cart[cartIndex].amount++
-						} else {
-							// is lesson is not in cart add new lesson object
-							this.cart.push({
-								lesson: lesson,
-								amount: 1
-							})
-						}
-					}
-
-				},
-				removeProduct(lesson) {
-					// remove product from cart container array
-					const index = this.cart.findIndex(i => i.lesson === lesson)
-					// check for last index 
-					if (index !== -1) {
-						// if lesson space already in cart deduct one amount 
-						this.cart[index].amount--
-						// add overall space when lesson is removed 
-						lesson.spaces += 1;
-						// else remove all lessons and update to original value
-						if (this.cart[index].amount == 0) {
-							this.cart.splice(index, 1);
-						}
-					}
-					// when a product is removed from cart add one back to space
-
-				},
-				// check for spaces
-				// you cannot add a course more the number of space capacity it has. 
-				checkItemCount(id) {
-					itemCount = 0;
-					for (i = 0; i < this.cart.length; i++) {
-						// check for current instance of is
-						if (this.cart[i] === id) {
-							itemCount += 1;
-						}
-					}
-					return itemCount;
-				},
-				// check if to show checkout page
-				showCheckOut() {
-					this.showProduct = this.showProduct ? false : true;
-				},
-
-			},
-			// computed values object
-			computed: {
-				// this method search the database(product.js) for 
-				searchLessons() {
-					const searchTerm = this.searchTerm.toLowerCase();
-					return this.lessons.filter(lesson =>
-						lesson.title.toLowerCase().includes(searchTerm) || lesson.location.toLowerCase().includes(searchTerm)
-					);
-
-				},
-				sortLessons() {
-					return this.searchLessons.slice().sort((a, b) => {
-						const valueA = a[this.sortAttribute];
-						const valueB = b[this.sortAttribute];
-
-						// Use localeCompare for string comparison, subtract for numeric comparison
-						const comparison = typeof valueA === 'string'
-							? valueA.localeCompare(valueB)
-							: valueA - valueB;
-
-						return this.sortOrder === 'asc' ? comparison : -comparison;
-					});
-				},
-
-				// get cart length
-				cartSize: function () {
-					return this.cart.reduce((sum, lesson) => sum + lesson.amount, 0)
-				},
-				// check if product can be added to cart
-				canAddToCart(lessons) {
-					return this.lessons.spaces > this.checkItemCount(lessons.id);
-				},
-
-			},
-		}
-		);
-
-	</script>
+	<script src="lessons.js"></script>
+	<script src="script.js"></script>
 </body>
