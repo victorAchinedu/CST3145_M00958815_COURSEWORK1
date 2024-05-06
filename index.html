@@ -73,6 +73,7 @@
 							<div class="card-body">
 								<p>price: {{product.price}} AED</p>
 								<p>Spaces: {{product.spaces}}</p>
+                                <p>location: {{product.location}}</p>
 								<!-- add to cart button -->
 								<button class="btn add-btn-styled rounded" v-on:click='addToCart(product)'
 									:disabled="product.spaces === 0">Add to
