@@ -19,15 +19,15 @@
 <body>
     <main id="app">
 		<div class="container mb-3">
-			<h1 class="text-center">course work 1 lessons</h1>
+			<h1 class="text-center">Course work 1</h1>
 
 			<div class="d-flex">
 				<button class="btn btn-primary fs-3 p-3 rounded-circle ms-auto " v-on:click="showCheckOut"
-					:disabled="!cartSize > 0">{{cartSize}} <i class="bi bi-bag-plus"></i></button>
+					:disabled="!cartSize > 0"> <i class="bi bi-bag-plus"></i> {{cartSize}}</button>
 			</div>
 
 			<div class="container" v-if="showProduct">
-				<div class="d-flex align-items-end gap-3 flex-wrap">
+				<div class="d-flex align-items-end gap-3 flex-wrap mb-3">
 
 					<div>
 						<input type="text" class="form-control" v-model="searchTerm"
@@ -59,25 +59,26 @@
 
 				<div class="row">
 					<div class="col-sm-4" v-for="product in sortLessons">
-						<div class="card mb-3 rounded-0 border border-success-subtle">
-							<div class="card-header d-flex">
-								<div>
-									<p>subject: {{product.subject}}</p>
-									<h5>title: {{product.title}}</h5>
-								</div>
-								<i :class="product.icon" class="fs-1 ms-auto"></i>
+						<div class="card mb-3 rounded-0 border border-black">
+							<div class="card-header">
+								<div class="d-flex justify-content-between align-items-baseline">
+                                    <div>
+                                        <h6>{{product.title}}</h6>
+                                    </div>
+                                    <div>
+                                        <i :class="product.icon" class="fs-1"></i>
+                                    </div>
+                                </div>
 							</div>
 							<div class="card-body">
 								<p>price: {{product.price}} AED</p>
 								<p>Spaces: {{product.spaces}}</p>
-							</div>
-							<div class="card-footer">
 								<!-- add to cart button -->
-								<button class="btn btn-primary rounded-0" v-on:click='addToCart(product)'
+								<button class="btn add-btn-styled rounded" v-on:click='addToCart(product)'
 									:disabled="product.spaces === 0">Add to
 									cart</button>
 								<!-- remove from cart button -->
-								<button class="btn btn-danger rounded-0" v-on:click='removeProduct(product)'>X</button>
+								<button class="btn remove-btn-styled rounded" v-on:click='removeProduct(product)'>remove</button>
 							</div>
 						</div>
 					</div>
