@@ -76,6 +76,14 @@ var app = new Vue({
             this.showProduct = this.showProduct ? false : true;
         },
 
+        checkout() {
+            if (this.validateUserInfo) {
+                alert('Order Submitted!')
+                this.showCheckOut()
+                this.cart = []
+            }
+        }
+
     },
     // computed values object
     computed: {

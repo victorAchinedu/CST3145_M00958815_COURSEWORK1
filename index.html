@@ -110,7 +110,7 @@
 						<div class="card rounded-4">
 							<div class="card-body">
 								<h5 class="card-title">User Information</h5>
-								<form>
+								<form @submit.prevent="checkout">
 									<div class="mb-3">
 										<label for="username" class="form-label">Username</label>
 										<input type="text" v-model="username" class="form-control"
